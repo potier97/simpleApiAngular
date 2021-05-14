@@ -13,7 +13,7 @@ export class HttpCrudTechCampService {
 
   getAllPost() { 
     let endPoints = "/posts/";
-    return this.httpClient.get<Post>(this.url + endPoints)
+    return this.httpClient.get<any>(this.url + endPoints)
   }
 
   getPostById(postId: number) { 
