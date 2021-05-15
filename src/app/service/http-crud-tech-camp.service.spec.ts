@@ -26,7 +26,7 @@ describe('HttpCrudTechCampService', () => {
    
   describe('getAllPost()', () => {
 
-    it('debe retornar 200 objetos en un aarreglo', () => {
+    it('Should be an array of 200 objects', () => {
       const postList = [
         {
           userId: 1,
@@ -629,17 +629,89 @@ describe('HttpCrudTechCampService', () => {
           body: "cupiditate quo est a modi nesciunt soluta\nipsa voluptas error itaque dicta in\nautem qui minus magnam et distinctio eum\naccusamus ratione error aut"
         }
       ];
-
       httpCrudTechCampService.getAllPost()
         .subscribe((result: any) => { 
           expect(result).toEqual(postList);
           expect(result[0].title).toEqual('sunt aut facere repellat provident occaecati excepturi optio reprehenderit');
           expect(result[0].body).toEqual('quia et suscipit\nsuscipit recusandae consequuntur expedita et cum\nreprehenderit molestiae ut ut quas totam\nnostrum rerum est autem sunt rem eveniet architecto');
         }); 
-        const req = httpTestingController.expectOne(httpCrudTechCampService.url + "/posts/");
-        expect(req.request.method).toEqual('GET');
-        req.flush(postList);  
-
+      const req = httpTestingController.expectOne(httpCrudTechCampService.url + "/posts/");
+      expect(req.request.method).toEqual('GET');
+      req.flush(postList);  
     });
   }); 
+
+  describe('getPostById()', () => {
+    it('Should be one object', () => {
+      const postById = {
+        userId: 1,
+        id: 5,
+        title: "nesciunt quas odio",
+        body: "repudiandae veniam quaerat sunt sed\nalias aut fugiat sit autem sed est\nvoluptatem omnis possimus esse voluptatibus quis\nest aut tenetur dolor neque"
+      }
+      
+      const id :number = 5;
+      httpCrudTechCampService.getPostById(id)
+        .subscribe((result: any) => { 
+          expect(result).toEqual(postById);  
+        }); 
+      const req = httpTestingController.expectOne(httpCrudTechCampService.url + "/posts/" + id);
+      expect(req.request.method).toEqual('GET');
+      req.flush(postById);  
+    });
+  }); 
+
+  describe('addPost()', () => {
+    it('Should be add new object', () => {
+      const newpost = { 
+        userId: '14',
+        id: '4',
+        tittle: 'New Post TITLE',
+        body: 'Lorem ipsum dolor fem MESSAGE',
+      };
+      httpCrudTechCampService.addPost(newpost)
+        .subscribe((result: any) => {  
+          expect(result.tittle).toEqual('New Post TITLE');
+          expect(result.body).toEqual('Lorem ipsum dolor fem MESSAGE');
+        }); 
+        const req = httpTestingController.expectOne(httpCrudTechCampService.url + "/posts");
+        expect(req.request.method).toEqual('POST');
+        req.flush(newpost);  
+    });
+  }); 
+
+  describe('updatePost()', () => {
+    it('Should be an update of an object', () => {
+      const newPost: Object = { 
+        userId: '4',
+        id: '1',
+        tittle: 'a simple tittle',
+        body: 'a simple message',
+      };
+      httpCrudTechCampService.updatePost(newPost)
+        .subscribe((result: any) => { 
+          expect(result).toEqual(newPost);
+        }); 
+      const req = httpTestingController.expectOne(httpCrudTechCampService.url + "/posts/1");
+      expect(req.request.method).toEqual('PUT');
+      req.flush(newPost);  
+    });
+  }); 
+
+  describe('deletePost()', () => {
+    it('Should be an empty object', () => {
+      const idPost :number = 3
+      const postList :object = {}
+      httpCrudTechCampService.deletePost(idPost)
+        .subscribe((result: any) => { 
+          expect(result).toEqual(postList);
+        }); 
+      const req = httpTestingController.expectOne(httpCrudTechCampService.url + "/posts/" + idPost);
+      expect(req.request.method).toEqual('DELETE');
+      req.flush(postList);  
+    });
+  }); 
+
+
+  
 });
